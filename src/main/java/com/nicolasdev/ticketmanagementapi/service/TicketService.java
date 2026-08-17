@@ -2,6 +2,7 @@ package com.nicolasdev.ticketmanagementapi.service;
 
 import com.nicolasdev.ticketmanagementapi.dto.CreateTicketRequestDTO;
 import com.nicolasdev.ticketmanagementapi.dto.TicketResponseDTO;
+import com.nicolasdev.ticketmanagementapi.dto.UpdateTicketRequestDTO;
 import com.nicolasdev.ticketmanagementapi.entity.Ticket;
 import com.nicolasdev.ticketmanagementapi.exception.TicketNotFoundException;
 import com.nicolasdev.ticketmanagementapi.repository.TicketRepository;
@@ -67,5 +68,34 @@ public class TicketService {
         response.setStatus(ticket.getStatus());
 
         return response;
+    }
+
+    public TicketResponseDTO updateTicket(Long ticketId,
+                                          UpdateTicketRequestDTO request){
+
+        Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(()->
+                new TicketNotFoundException("Ticket not found with id " + ticketId));
+
+        ticket.setTitle(request.getTitle());
+        ticket.setDescription(request.getDescription());
+        ticket.setStatus(request.getStatus());
+
+        Ticket updatedTicket = ticketRepository.save(ticket);
+
+        TicketResponseDTO responseDTO = new TicketResponseDTO();
+
+        responseDTO.setTicketId(updatedTicket.getTicketId());
+        responseDTO.setTitle(updatedTicket.getTitle());
+        responseDTO.setStatus(updatedTicket.getStatus());
+
+        return responseDTO;
+    }
+
+    public void deleteTicket(Long ticketId){
+
+        Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() ->
+                new TicketNotFoundException("Ticket not found with id " + ticketId));
+
+        ticketRepository.delete(ticket);
     }
 }

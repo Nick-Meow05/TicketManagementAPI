@@ -2,9 +2,11 @@ package com.nicolasdev.ticketmanagementapi.controller;
 
 import com.nicolasdev.ticketmanagementapi.dto.CreateTicketRequestDTO;
 import com.nicolasdev.ticketmanagementapi.dto.TicketResponseDTO;
+import com.nicolasdev.ticketmanagementapi.dto.UpdateTicketRequestDTO;
 import com.nicolasdev.ticketmanagementapi.service.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,4 +38,21 @@ public class TicketController {
 
         return ticketService.getTicketById(ticketId);
     }
+
+    @PutMapping("/{ticketId}")
+    public TicketResponseDTO updateTicket(
+            @PathVariable Long ticketId,
+            @Valid
+            @RequestBody UpdateTicketRequestDTO request){
+
+        return ticketService.updateTicket(ticketId, request);
+    }
+
+    @DeleteMapping("/{ticketId}")
+    public void deleteTicket
+            (@PathVariable Long ticketId){
+
+        ticketService.deleteTicket(ticketId);
+    }
+
 }
