@@ -29,4 +29,11 @@ public class TicketController {
 
         return ticketService.getAllTickets();
     }
+
+    @GetMapping("/{ticketId}")
+    public TicketResponseDTO getTicketById(
+            @PathVariable Long ticketId){
+
+        return ticketService.getTicketById(ticketId);
+    }
 }

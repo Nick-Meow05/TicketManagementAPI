@@ -1,9 +1,9 @@
 package com.nicolasdev.ticketmanagementapi.service;
 
-import com.nicolasdev.ticketmanagementapi.controller.TicketController;
 import com.nicolasdev.ticketmanagementapi.dto.CreateTicketRequestDTO;
 import com.nicolasdev.ticketmanagementapi.dto.TicketResponseDTO;
 import com.nicolasdev.ticketmanagementapi.entity.Ticket;
+import com.nicolasdev.ticketmanagementapi.exception.TicketNotFoundException;
 import com.nicolasdev.ticketmanagementapi.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,5 +53,19 @@ public class TicketService {
             responses.add(responseDTO);
         }
         return responses;
+    }
+
+    public TicketResponseDTO getTicketById(Long ticketId){
+
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found with id " + ticketId));
+
+        TicketResponseDTO response = new TicketResponseDTO();
+
+        response.setTicketId(ticket.getTicketId());
+        response.setTitle(ticket.getTitle());
+        response.setStatus(ticket.getStatus());
+
+        return response;
     }
 }
