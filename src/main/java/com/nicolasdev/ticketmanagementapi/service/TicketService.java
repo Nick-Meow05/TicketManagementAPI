@@ -1,11 +1,15 @@
 package com.nicolasdev.ticketmanagementapi.service;
 
+import com.nicolasdev.ticketmanagementapi.controller.TicketController;
 import com.nicolasdev.ticketmanagementapi.dto.CreateTicketRequestDTO;
 import com.nicolasdev.ticketmanagementapi.dto.TicketResponseDTO;
 import com.nicolasdev.ticketmanagementapi.entity.Ticket;
 import com.nicolasdev.ticketmanagementapi.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +34,24 @@ public class TicketService {
         response.setStatus(savedTicket.getStatus());
 
         return response;
+    }
+
+    public List<TicketResponseDTO> getAllTickets(){
+
+        List<Ticket> tickets = ticketRepository.findAll();
+
+        List<TicketResponseDTO> responses = new ArrayList<>();
+
+        for (Ticket ticket : tickets){
+
+            TicketResponseDTO responseDTO = new TicketResponseDTO();
+
+            responseDTO.setTicketId(ticket.getTicketId());
+            responseDTO.setTitle(ticket.getTitle());
+            responseDTO.setStatus(ticket.getStatus());
+
+            responses.add(responseDTO);
+        }
+        return responses;
     }
 }
