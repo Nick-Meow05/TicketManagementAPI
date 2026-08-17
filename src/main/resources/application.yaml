@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: ticket-management-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ticketdb
+    username: postgres
+    password: Darkslayer@12345!
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8081
+
+
+
