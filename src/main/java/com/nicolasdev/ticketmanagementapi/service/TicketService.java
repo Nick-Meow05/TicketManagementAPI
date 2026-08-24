@@ -7,8 +7,10 @@ import com.nicolasdev.ticketmanagementapi.entity.Ticket;
 import com.nicolasdev.ticketmanagementapi.exception.TicketNotFoundException;
 import com.nicolasdev.ticketmanagementapi.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,5 +99,29 @@ public class TicketService {
                 new TicketNotFoundException("Ticket not found with id " + ticketId));
 
         ticketRepository.delete(ticket);
+    }
+
+    public List<TicketResponseDTO> getTickets(
+            int page,
+            int size){
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Ticket> ticketPage = ticketRepository.findAll(pageable);
+
+        List<TicketResponseDTO> responses = new ArrayList<>();
+
+        for(Ticket ticket: ticketPage.getContent()){
+
+            TicketResponseDTO responseDTO = new TicketResponseDTO();
+
+            responseDTO.setTicketId(ticket.getTicketId());
+            responseDTO.setTitle(ticket.getTitle());
+            responseDTO.setStatus(ticket.getStatus());
+
+            responses.add(responseDTO);
+
+        }
+        return responses;
     }
 }
