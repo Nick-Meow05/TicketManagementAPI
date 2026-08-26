@@ -5,12 +5,14 @@ import com.nicolasdev.ticketmanagementapi.dto.TicketResponseDTO;
 import com.nicolasdev.ticketmanagementapi.dto.UpdateTicketRequestDTO;
 import com.nicolasdev.ticketmanagementapi.entity.Ticket;
 import com.nicolasdev.ticketmanagementapi.exception.TicketNotFoundException;
+import com.nicolasdev.ticketmanagementapi.mapper.TicketMapper;
 import com.nicolasdev.ticketmanagementapi.repository.TicketRepository;
+import com.nicolasdev.ticketmanagementapi.shared.pagination.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,7 @@ import java.util.List;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
+    private final TicketMapper ticketMapper;
 
     public TicketResponseDTO createTicket(CreateTicketRequestDTO request){
 
@@ -101,27 +104,16 @@ public class TicketService {
         ticketRepository.delete(ticket);
     }
 
-    public List<TicketResponseDTO> getTickets(
-            int page,
-            int size){
-
-        Pageable pageable = PageRequest.of(page, size);
+    public PageResponse<TicketResponseDTO> getTickets(
+            Pageable pageable){
 
         Page<Ticket> ticketPage = ticketRepository.findAll(pageable);
 
-        List<TicketResponseDTO> responses = new ArrayList<>();
-
-        for(Ticket ticket: ticketPage.getContent()){
-
-            TicketResponseDTO responseDTO = new TicketResponseDTO();
-
-            responseDTO.setTicketId(ticket.getTicketId());
-            responseDTO.setTitle(ticket.getTitle());
-            responseDTO.setStatus(ticket.getStatus());
-
-            responses.add(responseDTO);
-
-        }
-        return responses;
+        return new PageResponse<>(
+                ticketPage.map(ticketMapper::mapTicketToTicketResponseDTO).getContent(),
+                ticketPage.getNumber(),
+                ticketPage.getSize(),
+                ticketPage.getTotalPages(),
+                ticketPage.getTotalElements());
     }
 }
