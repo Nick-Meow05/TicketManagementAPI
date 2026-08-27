@@ -22,7 +22,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
-    }@ExceptionHandler
+    }
+    @ExceptionHandler
             (MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>>
     handleValidationException(MethodArgumentNotValidException exception){
@@ -45,5 +46,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(errors);
+    }
+    @ExceptionHandler
+            (UserAlreadyExistsException.class)
+    public ResponseEntity<String>
+    handleUserAlreadyExists(
+            UserAlreadyExistsException exception){
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
+    @ExceptionHandler
+            (InvalidCredentialsException.class)
+    public ResponseEntity<String>
+    handleInvalidCredentials(
+            InvalidCredentialsException exception){
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(exception.getMessage());
     }
 }
