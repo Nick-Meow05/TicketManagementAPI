@@ -9,11 +9,9 @@ public class TicketMapper {
     // Map the Ticket Entity to TicketResponseDTO Object
     //Map OWNER to RECEIVER - set the value from owner(Ticket) to Receiver (DTO)
     public TicketResponseDTO mapTicketToTicketResponseDTO(Ticket ticket){
-        TicketResponseDTO response = new TicketResponseDTO();
-        response.setTicketId(ticket.getTicketId());
-        response.setTitle(ticket.getTitle());
-        response.setStatus(ticket.getStatus());
-
-        return response;
+       return new TicketResponseDTO(
+                ticket.getTicketId(),
+                ticket.getTitle(),
+                ticket.getStatus());
     }
 }

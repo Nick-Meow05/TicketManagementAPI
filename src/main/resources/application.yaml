@@ -12,8 +12,14 @@ spring:
       ddl-auto: validate
     show-sql: true
 
+  data:
+    web:
+      pageable:
+        default-page-size: 50
+
 server:
   port: 8081
+
 
 
 

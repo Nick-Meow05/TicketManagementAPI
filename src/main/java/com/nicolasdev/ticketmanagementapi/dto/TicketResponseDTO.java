@@ -1,13 +1,7 @@
 package com.nicolasdev.ticketmanagementapi.dto;
 
-import lombok.Data;
+public record TicketResponseDTO(
+        long ticketId,
+        String title,
+        String status) {}
 
-@Data
-public class TicketResponseDTO {
-
-    private Long ticketId;
-
-    private String title;
-
-    private String status;
-}

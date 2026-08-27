@@ -33,32 +33,7 @@ public class TicketService {
 
         Ticket savedTicket = ticketRepository.save(ticket);
 
-        TicketResponseDTO response = new TicketResponseDTO();
-
-        response.setTicketId(savedTicket.getTicketId());
-        response.setTitle(savedTicket.getTitle());
-        response.setStatus(savedTicket.getStatus());
-
-        return response;
-    }
-
-    public List<TicketResponseDTO> getAllTickets(){
-
-        List<Ticket> tickets = ticketRepository.findAll();
-
-        List<TicketResponseDTO> responses = new ArrayList<>();
-
-        for (Ticket ticket : tickets){
-
-            TicketResponseDTO responseDTO = new TicketResponseDTO();
-
-            responseDTO.setTicketId(ticket.getTicketId());
-            responseDTO.setTitle(ticket.getTitle());
-            responseDTO.setStatus(ticket.getStatus());
-
-            responses.add(responseDTO);
-        }
-        return responses;
+        return ticketMapper.mapTicketToTicketResponseDTO(savedTicket);
     }
 
     public TicketResponseDTO getTicketById(Long ticketId){
@@ -66,13 +41,7 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new TicketNotFoundException("Ticket not found with id " + ticketId));
 
-        TicketResponseDTO response = new TicketResponseDTO();
-
-        response.setTicketId(ticket.getTicketId());
-        response.setTitle(ticket.getTitle());
-        response.setStatus(ticket.getStatus());
-
-        return response;
+        return ticketMapper.mapTicketToTicketResponseDTO(ticket);
     }
 
     public TicketResponseDTO updateTicket(Long ticketId,
@@ -87,13 +56,7 @@ public class TicketService {
 
         Ticket updatedTicket = ticketRepository.save(ticket);
 
-        TicketResponseDTO responseDTO = new TicketResponseDTO();
-
-        responseDTO.setTicketId(updatedTicket.getTicketId());
-        responseDTO.setTitle(updatedTicket.getTitle());
-        responseDTO.setStatus(updatedTicket.getStatus());
-
-        return responseDTO;
+        return ticketMapper.mapTicketToTicketResponseDTO(updatedTicket);
     }
 
     public void deleteTicket(Long ticketId){
@@ -115,5 +78,14 @@ public class TicketService {
                 ticketPage.getSize(),
                 ticketPage.getTotalPages(),
                 ticketPage.getTotalElements());
+    }
+
+    public List<TicketResponseDTO> getTicketsByStatus(String status){
+
+        List<Ticket> tickets = ticketRepository.findByStatus(status);
+
+        return tickets.stream()
+                .map(ticketMapper::mapTicketToTicketResponseDTO)
+                .toList();
     }
 }
