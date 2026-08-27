@@ -16,8 +16,8 @@ spring:
     web:
       pageable:
         default-page-size: 50
-  jwt:
-    secret: myVerySecretJwtKeyThatMustBeLongEnoughForHs256
+jwt:
+  secret: myVerySecretJwtKeyThatMustBeLongEnoughForHs256
 
 server:
   port: 8081
